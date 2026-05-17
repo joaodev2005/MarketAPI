@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\MarketAPI.Communication\MarketAPI.Communication.csproj" />
+    <ProjectReference Include="..\..\Shared\MarketAPI.Exception\MarketAPI.Exception.csproj" />
+    <ProjectReference Include="..\MarketAPI.Domain\MarketAPI.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

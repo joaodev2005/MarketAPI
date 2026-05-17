@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Backend/">
+    <Project Path="src/Backend/MarketAPI.Api/MarketAPI.Api.csproj" />
+    <Project Path="src/Backend/MarketAPI.Application/MarketAPI.Application.csproj" />
+    <Project Path="src/Backend/MarketAPI.Domain/MarketAPI.Domain.csproj" />
+    <Project Path="src/Backend/MarketAPI.Infrastructure/MarketAPI.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Shared/">
+    <Project Path="src/Shared/MarketAPI.Communication/MarketAPI.Communication.csproj" />
+    <Project Path="src/Shared/MarketAPI.Exception/MarketAPI.Exception.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
+</Solution>
