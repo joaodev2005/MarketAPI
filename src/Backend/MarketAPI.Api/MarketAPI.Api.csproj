@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Shared\MarketAPI.Communication\MarketAPI.Communication.csproj" />
     <ProjectReference Include="..\..\Shared\MarketAPI.Exception\MarketAPI.Exception.csproj" />
     <ProjectReference Include="..\MarketAPI.Application\MarketAPI.Application.csproj" />
