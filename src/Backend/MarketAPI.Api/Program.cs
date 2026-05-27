@@ -1,17 +1,42 @@
+using System.Globalization;
+using MarketAPI.Api.Converters;
+using MarketAPI.Api.Filters;
 using MarketAPI.Application;
 using MarketAPI.Infrastructure;
 using MarketAPI.Infrastructure.Migrations;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new StringConverter()));
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new List<CultureInfo> { new("en"), new("pt-BR") };
+
+    options.DefaultRequestCulture = new RequestCulture("en");
+
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+
+    options.RequestCultureProviders = [ new AcceptLanguageHeaderRequestCultureProvider() ];
+});
+
+builder.Services.AddMvc(options => options.Filters.Add<ExceptionFilter>());
+
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
 var app = builder.Build();
+
+var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
+
+app.UseRequestLocalization(localizationOptions.Value);
 
 if (app.Environment.IsDevelopment())
 {
