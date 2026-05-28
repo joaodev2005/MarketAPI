@@ -4,6 +4,7 @@ using MarketAPI.Communication.Responses;
 using Mapster;
 using MarketAPI.Domain.Repositories;
 using MarketAPI.Domain.Security.PasswordHashing;
+using MarketAPI.Domain.Security.Tokens;
 using MarketAPI.Exception;
 using MarketAPI.Exception.ExceptionsBase;
 
@@ -15,16 +16,19 @@ public class RegisterUserAccountUseCase : IRegisterUserAccountUseCase
     private readonly IUserWriteOnlyRepository _userWriteOnlyRepository;
     private readonly IUserReadOnlyRepository _userReadOnlyRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IAccessTokenGenerator _tokenGenerator;
 
     public RegisterUserAccountUseCase(
         IUserWriteOnlyRepository userWriteOnlyRepository,
         IUserReadOnlyRepository userReadOnlyRepository, 
-        IUnitOfWork unitOfWork, IPasswordHasher passwordHasher)
+        IUnitOfWork unitOfWork, IPasswordHasher passwordHasher, 
+        IAccessTokenGenerator tokenGenerator)
     {
         _userWriteOnlyRepository = userWriteOnlyRepository;
         _userReadOnlyRepository = userReadOnlyRepository;
         _unitOfWork = unitOfWork;
         _passwordHasher = passwordHasher;
+        _tokenGenerator = tokenGenerator;
     }
 
     public async Task<ResponseRegisteredUserJson> Execute(RequestRegisterUserAccountJson request)
@@ -42,7 +46,10 @@ public class RegisterUserAccountUseCase : IRegisterUserAccountUseCase
         return new ResponseRegisteredUserJson
         {
             Name = user.Name,
-            Tokens = new ResponseTokensJson()
+            Tokens = new ResponseTokensJson
+            {
+                AccessToken = _tokenGenerator.Generate(user)
+            }
         };
     }
 

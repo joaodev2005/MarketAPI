@@ -2,9 +2,11 @@
 using FluentMigrator.Runner;
 using MarketAPI.Domain.Repositories;
 using MarketAPI.Domain.Security.PasswordHashing;
+using MarketAPI.Domain.Security.Tokens;
 using MarketAPI.Infrastructure.DataAccess;
 using MarketAPI.Infrastructure.DataAccess.Repositories;
 using MarketAPI.Infrastructure.Security.PasswordHashing;
+using MarketAPI.Infrastructure.Security.Tokens;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +23,12 @@ public static class DependencyInjectionExtension
             services.AddScoped<IUserWriteOnlyRepository, UserRepository>();
             services.AddScoped<IUserReadOnlyRepository, UserRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
+            var signingKey = configuration["Jwt:SigningKey"]!;
+            var expirationMinutes = int.Parse(configuration["Jwt:ExpirationMinutes"]!);
+
+            services.AddScoped<IAccessTokenGenerator>(_ =>
+                new JwtTokenGenerator(signingKey, expirationMinutes));
             
             services.AddDbContext<MarketApiDbContext>(config =>
             {
