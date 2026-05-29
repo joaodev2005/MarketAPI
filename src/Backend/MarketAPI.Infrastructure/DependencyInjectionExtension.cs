@@ -23,6 +23,7 @@ public static class DependencyInjectionExtension
             services.AddScoped<IUserWriteOnlyRepository, UserRepository>();
             services.AddScoped<IUserReadOnlyRepository, UserRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             
             var signingKey = configuration["Jwt:SigningKey"]!;
             var expirationMinutes = int.Parse(configuration["Jwt:ExpirationMinutes"]!);
