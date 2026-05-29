@@ -3,6 +3,10 @@ using System.Text;
 using MarketAPI.Api.Converters;
 using MarketAPI.Api.Filters;
 using MarketAPI.Application;
+using MarketAPI.Domain.Entities;
+using MarketAPI.Domain.Enums;
+using MarketAPI.Domain.Repositories;
+using MarketAPI.Domain.Security.PasswordHashing;
 using MarketAPI.Infrastructure;
 using MarketAPI.Infrastructure.Migrations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -83,13 +87,22 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-ExecuteMigrations();
+await ExecuteMigrations();
 
+await SeedAdmin();
+    
 app.Run();
 
-void ExecuteMigrations()
+async Task ExecuteMigrations()
 { 
     using  var scope = app.Services.CreateScope();
     
     DatabaseMigration.ExecuteMigrations(scope.ServiceProvider);
+}
+
+async Task SeedAdmin()
+{
+    using var scope = app.Services.CreateScope();
+    
+    await AdminSeed.Seed(scope.ServiceProvider, builder.Configuration);
 }

@@ -1,4 +1,5 @@
 ﻿using MarketAPI.Domain.Entities;
+using MarketAPI.Domain.Enums;
 using MarketAPI.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,4 +27,7 @@ internal sealed class UserRepository : IUserWriteOnlyRepository, IUserReadOnlyRe
             .AsNoTracking()
             .SingleOrDefaultAsync(user => user.Active && user.Email.Equals(email));
     }
+    
+    public async Task<bool> ExistsAnyAdmin()
+        => await _dbContext.Users.AnyAsync(u => u.Role == UserRole.Admin);
 }
