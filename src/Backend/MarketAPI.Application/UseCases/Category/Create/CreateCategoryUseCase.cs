@@ -1,5 +1,6 @@
 ﻿using FluentValidation.Results;
 using MarketAPI.Communication.Requests;
+using MarketAPI.Communication.Responses;
 using MarketAPI.Domain.Repositories;
 using MarketAPI.Exception.ExceptionsBase;
 
@@ -18,7 +19,7 @@ public class CreateCategoryUseCase : ICreateCategoryUseCase
         _unitOfWork = unitOfWork;
     }
 
-    public async Task Execute(RequestCategoryJson request)
+    public async Task<ResponseCategoryJson> Execute(RequestCategoryJson request)
     {
         await ValidateAndThrowOnFailures(request);
 
@@ -30,6 +31,12 @@ public class CreateCategoryUseCase : ICreateCategoryUseCase
 
         await _categoryRepository.AddAsync(category);
         await _unitOfWork.Commit();
+        
+        return new ResponseCategoryJson
+        {
+            Id = category.Id,
+            Name = category.Name
+        };
     }
     
     private async Task ValidateAndThrowOnFailures(RequestCategoryJson request)

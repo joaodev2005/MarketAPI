@@ -1,4 +1,5 @@
 ﻿using MarketAPI.Application.UseCases.Category.Create;
+using MarketAPI.Application.UseCases.Category.List;
 using MarketAPI.Application.UseCases.Login;
 using MarketAPI.Application.UseCases.User.Register;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,5 +13,6 @@ public static class DependencyInjectionExtension
         services.AddScoped<IRegisterUserAccountUseCase, RegisterUserAccountUseCase>();
         services.AddScoped<ILoginWithEmailAndPasswordUseCase, LoginWithEmailAndPasswordUseCase>();
         services.AddScoped<ICreateCategoryUseCase, CreateCategoryUseCase>();
+        services.AddScoped<IListCategoriesUseCase, ListCategoriesUseCase>();
     }
 }
