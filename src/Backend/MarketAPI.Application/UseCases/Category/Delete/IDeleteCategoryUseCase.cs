@@ -1,0 +1,6 @@
+﻿namespace MarketAPI.Application.UseCases.Category.Delete;
+
+public interface IDeleteCategoryUseCase
+{
+    Task Execute(Guid id);
+}

@@ -1,4 +1,5 @@
 ﻿using MarketAPI.Application.UseCases.Category.Create;
+using MarketAPI.Application.UseCases.Category.Delete;
 using MarketAPI.Application.UseCases.Category.List;
 using MarketAPI.Application.UseCases.Category.Update;
 using MarketAPI.Communication.Requests;
@@ -45,6 +46,18 @@ public class CategoriesController : ControllerBase
         [FromBody] RequestCategoryJson request)
     {
         await useCase.Execute(id, request);
+        return NoContent();
+    }
+    
+    [HttpDelete("{id:guid}")]
+    [Authorize(Roles = "Admin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Delete(
+        [FromServices] IDeleteCategoryUseCase useCase,
+        [FromRoute] Guid id)
+    {
+        await useCase.Execute(id);
         return NoContent();
     }
 }
