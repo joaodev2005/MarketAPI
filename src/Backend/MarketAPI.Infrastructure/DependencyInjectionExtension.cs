@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using FluentMigrator.Runner;
 using MarketAPI.Domain.Repositories;
+using MarketAPI.Domain.Repositories.Product;
 using MarketAPI.Domain.Security.PasswordHashing;
 using MarketAPI.Domain.Security.Tokens;
 using MarketAPI.Infrastructure.DataAccess;
@@ -24,6 +25,7 @@ public static class DependencyInjectionExtension
             services.AddScoped<IUserReadOnlyRepository, UserRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
             
             var signingKey = configuration["Jwt:SigningKey"]!;
             var expirationMinutes = int.Parse(configuration["Jwt:ExpirationMinutes"]!);

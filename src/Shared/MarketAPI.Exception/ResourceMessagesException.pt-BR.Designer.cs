@@ -60,6 +60,33 @@ namespace MarketAPI.Exception {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A categoria é obrigatória..
+        /// </summary>
+        internal static string CATEGORY_IS_REQUIRED {
+            get {
+                return ResourceManager.GetString("CATEGORY_IS_REQUIRED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O preço deve ser maior que zero..
+        /// </summary>
+        internal static string PRICE_MUST_BE_GREATHER_THAN_0 {
+            get {
+                return ResourceManager.GetString("PRICE_MUST_BE_GREATHER_THAN_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O estoque não pode ser negativo..
+        /// </summary>
+        internal static string STOCK_CANNOT_BE_NEGATIVE {
+            get {
+                return ResourceManager.GetString("STOCK_CANNOT_BE_NEGATIVE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Erro desconhecido.
         /// </summary>
         internal static string UNKNOWN_ERROR {

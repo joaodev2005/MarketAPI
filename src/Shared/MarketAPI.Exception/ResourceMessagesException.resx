@@ -39,4 +39,13 @@
     <data name="VALIDATION_EMAIL_REQUIRED" xml:space="preserve">
         <value>Oops! Email is required</value>
     </data>
+    <data name="PRICE_MUST_BE_GREATHER_THAN_0" xml:space="preserve">
+        <value>Price must be greater than zero.</value>
+    </data>
+    <data name="STOCK_CANNOT_BE_NEGATIVE" xml:space="preserve">
+        <value>Stock cannot be negative.</value>
+    </data>
+    <data name="CATEGORY_IS_REQUIRED" xml:space="preserve">
+        <value>Category is required.</value>
+    </data>
 </root>
