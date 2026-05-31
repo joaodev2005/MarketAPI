@@ -1,5 +1,6 @@
 ﻿using MarketAPI.Application.UseCases.Category.Create;
 using MarketAPI.Application.UseCases.Category.List;
+using MarketAPI.Application.UseCases.Category.Update;
 using MarketAPI.Communication.Requests;
 using MarketAPI.Communication.Responses;
 using Microsoft.AspNetCore.Authorization;
@@ -31,5 +32,19 @@ public class CategoriesController : ControllerBase
     {
         var response = await useCase.Execute();
         return Ok(response);
+    }
+    
+    [HttpPut("{id:guid}")]
+    [Authorize(Roles = "Admin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Update(
+        [FromServices] IUpdateCategoryUseCase useCase,
+        [FromRoute] Guid id,
+        [FromBody] RequestCategoryJson request)
+    {
+        await useCase.Execute(id, request);
+        return NoContent();
     }
 }

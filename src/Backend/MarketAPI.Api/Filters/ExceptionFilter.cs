@@ -10,7 +10,7 @@ public class ExceptionFilter : IExceptionFilter
 {
     public void OnException(ExceptionContext context)
     {
-        if (context.Exception is MarketAPIException myRecipeBookException)
+        if (context.Exception is MarketApiException myRecipeBookException)
         {
             context.HttpContext.Response.StatusCode = (int)myRecipeBookException.GetStatusCode();
 

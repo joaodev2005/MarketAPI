@@ -2,7 +2,7 @@
 
 namespace MarketAPI.Exception.ExceptionsBase;
 
-public class InvalidLoginException : MarketAPIException
+public class InvalidLoginException : MarketApiException
 {
     public override List<string> GetErrorMessages() => [ResourceMessagesException.VALIDATION_LOGIN_INVALID];
     public override HttpStatusCode GetStatusCode() => HttpStatusCode.Unauthorized;

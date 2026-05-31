@@ -2,7 +2,7 @@
 
 namespace MarketAPI.Exception.ExceptionsBase;
 
-public class ErrorOnValidationException : MarketAPIException
+public class ErrorOnValidationException : MarketApiException
 {
     private readonly List<string> _errors;
 

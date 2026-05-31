@@ -2,7 +2,7 @@
 
 namespace MarketAPI.Exception.ExceptionsBase;
 
-public abstract class MarketAPIException : System.Exception
+public abstract class MarketApiException : System.Exception
 {
     public abstract HttpStatusCode GetStatusCode();
     public abstract List<string> GetErrorMessages();
