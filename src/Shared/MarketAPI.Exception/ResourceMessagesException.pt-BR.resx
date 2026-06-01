@@ -48,4 +48,10 @@
     <data name="CATEGORY_IS_REQUIRED" xml:space="preserve">
         <value>A categoria é obrigatória.</value>
     </data>
+    <data name="PRODUCT_IS_REQUIRED" xml:space="preserve">
+        <value>O produto é obrigatório.</value>
+    </data>
+    <data name="QUANTITY_MUST_BE_GREATER_THAN_0" xml:space="preserve">
+        <value>A quantidade deve ser maior que zero.</value>
+    </data>
 </root>

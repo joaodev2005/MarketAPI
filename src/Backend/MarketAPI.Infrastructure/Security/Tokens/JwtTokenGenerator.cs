@@ -22,6 +22,7 @@ internal class JwtTokenGenerator : IAccessTokenGenerator
     {
         var claims = new List<Claim>
         {
+            new(ClaimTypes.Sid, user.Id.ToString()),
             new(ClaimTypes.Name, user.Name),
             new(ClaimTypes.Email, user.Email),
             new(ClaimTypes.Role, user.Role.ToString())
