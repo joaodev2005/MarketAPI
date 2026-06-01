@@ -4,6 +4,7 @@ using MarketAPI.Application.UseCases.Category.List;
 using MarketAPI.Application.UseCases.Category.Update;
 using MarketAPI.Application.UseCases.Login;
 using MarketAPI.Application.UseCases.Product.Create;
+using MarketAPI.Application.UseCases.Product.List;
 using MarketAPI.Application.UseCases.User.Register;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,5 +21,6 @@ public static class DependencyInjectionExtension
         services.AddScoped<IUpdateCategoryUseCase, UpdateCategoryUseCase>();
         services.AddScoped<IDeleteCategoryUseCase, DeleteCategoryUseCase>();
         services.AddScoped<ICreateProductUseCase, CreateProductUseCase>();
+        services.AddScoped<IListProductsUseCase, ListProductsUseCase>();
     }
 }
