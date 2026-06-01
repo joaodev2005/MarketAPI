@@ -1,6 +1,7 @@
 ﻿using MarketAPI.Application.UseCases.Product.Create;
 using MarketAPI.Application.UseCases.Product.GetById;
 using MarketAPI.Application.UseCases.Product.List;
+using MarketAPI.Application.UseCases.Product.Update;
 using MarketAPI.Communication.Requests;
 using MarketAPI.Communication.Responses;
 using Microsoft.AspNetCore.Authorization;
@@ -42,5 +43,19 @@ public class ProductsController : ControllerBase
     {
         var response = await useCase.Execute(id);
         return Ok(response);
+    }
+    
+    [HttpPut("{id:guid}")]
+    [Authorize(Roles = "Admin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Update(
+        [FromServices] IUpdateProductUseCase useCase,
+        [FromRoute] Guid id,
+        [FromBody] RequestProductJson request)
+    {
+        await useCase.Execute(id, request);
+        return NoContent();
     }
 }
