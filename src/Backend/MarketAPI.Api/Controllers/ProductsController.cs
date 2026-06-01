@@ -1,4 +1,5 @@
 ﻿using MarketAPI.Application.UseCases.Product.Create;
+using MarketAPI.Application.UseCases.Product.GetById;
 using MarketAPI.Application.UseCases.Product.List;
 using MarketAPI.Communication.Requests;
 using MarketAPI.Communication.Responses;
@@ -29,6 +30,17 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> List([FromServices] IListProductsUseCase useCase)
     {
         var response = await useCase.Execute();
+        return Ok(response);
+    }
+    
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(ResponseProductJson), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById(
+        [FromServices] IGetProductByIdUseCase useCase,
+        [FromRoute] Guid id)
+    {
+        var response = await useCase.Execute(id);
         return Ok(response);
     }
 }
