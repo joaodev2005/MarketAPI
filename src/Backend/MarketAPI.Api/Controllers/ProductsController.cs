@@ -1,4 +1,5 @@
 ﻿using MarketAPI.Application.UseCases.Product.Create;
+using MarketAPI.Application.UseCases.Product.Delete;
 using MarketAPI.Application.UseCases.Product.GetById;
 using MarketAPI.Application.UseCases.Product.List;
 using MarketAPI.Application.UseCases.Product.Update;
@@ -58,4 +59,17 @@ public class ProductsController : ControllerBase
         await useCase.Execute(id, request);
         return NoContent();
     }
+    
+    [HttpDelete("{id:guid}")]
+    [Authorize(Roles = "Admin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Delete(
+        [FromServices] IDeleteProductUseCase useCase,
+        [FromRoute] Guid id)
+    {
+        await useCase.Execute(id);
+        return NoContent();
+    }
+    
 }

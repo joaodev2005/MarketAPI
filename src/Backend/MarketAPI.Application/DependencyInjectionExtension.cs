@@ -4,6 +4,7 @@ using MarketAPI.Application.UseCases.Category.List;
 using MarketAPI.Application.UseCases.Category.Update;
 using MarketAPI.Application.UseCases.Login;
 using MarketAPI.Application.UseCases.Product.Create;
+using MarketAPI.Application.UseCases.Product.Delete;
 using MarketAPI.Application.UseCases.Product.GetById;
 using MarketAPI.Application.UseCases.Product.List;
 using MarketAPI.Application.UseCases.Product.Update;
@@ -26,5 +27,6 @@ public static class DependencyInjectionExtension
         services.AddScoped<IListProductsUseCase, ListProductsUseCase>();
         services.AddScoped<IGetProductByIdUseCase, GetProductByIdUseCase>();
         services.AddScoped<IUpdateProductUseCase, UpdateProductUseCase>();
+        services.AddScoped<IDeleteProductUseCase, DeleteProductUseCase>();
     }
 }
