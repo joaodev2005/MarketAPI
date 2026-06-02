@@ -2,6 +2,7 @@
 using FluentMigrator.Runner;
 using MarketAPI.Domain.Repositories;
 using MarketAPI.Domain.Repositories.Cart;
+using MarketAPI.Domain.Repositories.Order;
 using MarketAPI.Domain.Repositories.Product;
 using MarketAPI.Domain.Security;
 using MarketAPI.Domain.Security.PasswordHashing;
@@ -32,6 +33,7 @@ public static class DependencyInjectionExtension
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddHttpContextAccessor();
             services.AddScoped<ILoggedUser, LoggedUser>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
             
             var signingKey = configuration["Jwt:SigningKey"]!;
             var expirationMinutes = int.Parse(configuration["Jwt:ExpirationMinutes"]!);
