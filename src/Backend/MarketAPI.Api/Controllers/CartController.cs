@@ -1,4 +1,5 @@
 ﻿using MarketAPI.Application.UseCases.Cart.AddItem;
+using MarketAPI.Application.UseCases.Cart.ClearCart;
 using MarketAPI.Application.UseCases.Cart.GetCart;
 using MarketAPI.Application.UseCases.Cart.RemoveItem;
 using MarketAPI.Communication.Requests;
@@ -41,6 +42,15 @@ public class CartController : ControllerBase
         [FromRoute] Guid itemId)
     {
         await useCase.Execute(itemId);
+        return NoContent();
+    }
+    
+    [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ClearCart([FromServices] IClearCartUseCase useCase)
+    {
+        await useCase.Execute();
         return NoContent();
     }
 }

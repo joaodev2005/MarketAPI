@@ -1,4 +1,5 @@
 ﻿using MarketAPI.Application.UseCases.Cart.AddItem;
+using MarketAPI.Application.UseCases.Cart.ClearCart;
 using MarketAPI.Application.UseCases.Cart.GetCart;
 using MarketAPI.Application.UseCases.Cart.RemoveItem;
 using MarketAPI.Application.UseCases.Category.Create;
@@ -34,5 +35,6 @@ public static class DependencyInjectionExtension
         services.AddScoped<IAddItemToCartUseCase, AddItemToCartUseCase>();
         services.AddScoped<IGetCartUseCase, GetCartUseCase>();
         services.AddScoped<IRemoveItemFromCartUseCase, RemoveItemFromCartUseCase>();
+        services.AddScoped<IClearCartUseCase, ClearCartUseCase>();
     }
 }
