@@ -1,5 +1,6 @@
 ﻿using MarketAPI.Application.UseCases.Cart.AddItem;
 using MarketAPI.Application.UseCases.Cart.GetCart;
+using MarketAPI.Application.UseCases.Cart.RemoveItem;
 using MarketAPI.Communication.Requests;
 using MarketAPI.Communication.Responses;
 using Microsoft.AspNetCore.Authorization;
@@ -30,5 +31,16 @@ public class CartController : ControllerBase
     {
         var response = await useCase.Execute();
         return Ok(response);
+    }
+    
+    [HttpDelete("{itemId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RemoveItem(
+        [FromServices] IRemoveItemFromCartUseCase useCase,
+        [FromRoute] Guid itemId)
+    {
+        await useCase.Execute(itemId);
+        return NoContent();
     }
 }
