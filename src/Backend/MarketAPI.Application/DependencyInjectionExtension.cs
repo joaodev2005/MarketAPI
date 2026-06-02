@@ -8,6 +8,7 @@ using MarketAPI.Application.UseCases.Category.List;
 using MarketAPI.Application.UseCases.Category.Update;
 using MarketAPI.Application.UseCases.Login;
 using MarketAPI.Application.UseCases.Order.Create;
+using MarketAPI.Application.UseCases.Order.List;
 using MarketAPI.Application.UseCases.Product.Create;
 using MarketAPI.Application.UseCases.Product.Delete;
 using MarketAPI.Application.UseCases.Product.GetById;
@@ -38,5 +39,6 @@ public static class DependencyInjectionExtension
         services.AddScoped<IRemoveItemFromCartUseCase, RemoveItemFromCartUseCase>();
         services.AddScoped<IClearCartUseCase, ClearCartUseCase>();
         services.AddScoped<ICreateOrderUseCase, CreateOrderUseCase>();
+        services.AddScoped<IListOrdersUseCase, ListOrdersUseCase>();
     }
 }

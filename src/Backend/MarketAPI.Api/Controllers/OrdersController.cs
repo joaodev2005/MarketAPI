@@ -1,4 +1,5 @@
 ﻿using MarketAPI.Application.UseCases.Order.Create;
+using MarketAPI.Application.UseCases.Order.List;
 using MarketAPI.Communication.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,5 +19,14 @@ public class OrdersController : ControllerBase
     {
         var response = await useCase.Execute();
         return Created(string.Empty, response);
+    }
+    
+    [HttpGet]
+    [Authorize(Roles = "Customer")]
+    [ProducesResponseType(typeof(List<ResponseOrderJson>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> List([FromServices] IListOrdersUseCase useCase)
+    {
+        var response = await useCase.Execute();
+        return Ok(response);
     }
 }
