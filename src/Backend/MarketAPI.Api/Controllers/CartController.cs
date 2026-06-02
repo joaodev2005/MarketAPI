@@ -1,5 +1,7 @@
 ﻿using MarketAPI.Application.UseCases.Cart.AddItem;
+using MarketAPI.Application.UseCases.Cart.GetCart;
 using MarketAPI.Communication.Requests;
+using MarketAPI.Communication.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,5 +22,13 @@ public class CartController : ControllerBase
     {
         await useCase.Execute(request);
         return NoContent();
+    }
+    
+    [HttpGet]
+    [ProducesResponseType(typeof(ResponseCartJson), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetCart([FromServices] IGetCartUseCase useCase)
+    {
+        var response = await useCase.Execute();
+        return Ok(response);
     }
 }
