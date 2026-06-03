@@ -1,6 +1,9 @@
-﻿using MarketAPI.Application.UseCases.Order.Create;
+﻿using MarketAPI.Application.UseCases.Order.Admin.GetAll;
+using MarketAPI.Application.UseCases.Order.Admin.UpdateStatus;
+using MarketAPI.Application.UseCases.Order.Create;
 using MarketAPI.Application.UseCases.Order.GetById;
 using MarketAPI.Application.UseCases.Order.List;
+using MarketAPI.Communication.Requests;
 using MarketAPI.Communication.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,5 +44,27 @@ public class OrdersController : ControllerBase
     {
         var response = await useCase.Execute(id);
         return Ok(response);
+    }
+    
+    [HttpGet("admin")]
+    [Authorize(Roles = "Admin")]
+    [ProducesResponseType(typeof(List<ResponseOrderJson>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAll([FromServices] IGetAllOrdersUseCase useCase)
+    {
+        var response = await useCase.Execute();
+        return Ok(response);
+    }
+    
+    [HttpPut("admin/{id:guid}/status")]
+    [Authorize(Roles = "Admin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateStatus(
+        [FromServices] IUpdateOrderStatusUseCase useCase,
+        [FromRoute] Guid id,
+        [FromBody] RequestUpdateOrderStatusJson request)
+    {
+        await useCase.Execute(id, request);
+        return NoContent();
     }
 }

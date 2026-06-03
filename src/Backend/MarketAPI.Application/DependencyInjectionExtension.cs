@@ -7,6 +7,8 @@ using MarketAPI.Application.UseCases.Category.Delete;
 using MarketAPI.Application.UseCases.Category.List;
 using MarketAPI.Application.UseCases.Category.Update;
 using MarketAPI.Application.UseCases.Login;
+using MarketAPI.Application.UseCases.Order.Admin.GetAll;
+using MarketAPI.Application.UseCases.Order.Admin.UpdateStatus;
 using MarketAPI.Application.UseCases.Order.Create;
 using MarketAPI.Application.UseCases.Order.GetById;
 using MarketAPI.Application.UseCases.Order.List;
@@ -42,5 +44,7 @@ public static class DependencyInjectionExtension
         services.AddScoped<ICreateOrderUseCase, CreateOrderUseCase>();
         services.AddScoped<IListOrdersUseCase, ListOrdersUseCase>();
         services.AddScoped<IGetOrderByIdUseCase, GetOrderByIdUseCase>();
+        services.AddScoped<IGetAllOrdersUseCase, GetAllOrdersUseCase>();
+        services.AddScoped<IUpdateOrderStatusUseCase, UpdateOrderStatusUseCase>();
     }
 }
