@@ -1,6 +1,8 @@
 ﻿using MarketAPI.Communication.Responses;
 using MarketAPI.Domain.Entities;
 using MarketAPI.Domain.Enums;
+using MarketAPI.Domain.Messaging;
+using MarketAPI.Domain.Messaging.Messages;
 using MarketAPI.Domain.Repositories;
 using MarketAPI.Domain.Repositories.Cart;
 using MarketAPI.Domain.Repositories.Order;
@@ -17,19 +19,21 @@ public class CreateOrderUseCase : ICreateOrderUseCase
     private readonly IProductRepository _productRepository;
     private readonly ILoggedUser _loggedUser;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMessagePublisher _messagePublisher;
 
     public CreateOrderUseCase(
         ICartRepository cartRepository, 
         IOrderRepository orderRepository, 
         IProductRepository productRepository, 
         ILoggedUser loggedUser, 
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork, IMessagePublisher messagePublisher)
     {
         _cartRepository = cartRepository;
         _orderRepository = orderRepository;
         _productRepository = productRepository;
         _loggedUser = loggedUser;
         _unitOfWork = unitOfWork;
+        _messagePublisher = messagePublisher;
     }
 
     public async Task<ResponseOrderJson> Execute()
@@ -77,6 +81,20 @@ public class CreateOrderUseCase : ICreateOrderUseCase
         await _orderRepository.AddAsync(order);
         await _cartRepository.ClearAsync(cart);
         await _unitOfWork.Commit();
+
+        _messagePublisher.Publish(new OrderCreatedMessage
+        {
+            OrderId = order.Id,
+            CustomerEmail = _loggedUser.GetUserEmail(),
+            CustomerName = _loggedUser.GetUserName(),
+            Total = order.Total,
+            Items = order.Items.Select(i => new OrderItemMessage
+            {
+                ProductName = productNames[i.ProductId],
+                Quantity = i.Quantity,
+                Price = i.Price
+            }).ToList()
+        }, "order-created");
 
         return new ResponseOrderJson
         {

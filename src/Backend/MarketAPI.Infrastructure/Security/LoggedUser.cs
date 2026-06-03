@@ -20,4 +20,16 @@ public class LoggedUser : ILoggedUser
 
         return Guid.Parse(userId!);
     }
+
+    public string GetUserEmail()
+    {
+        return _httpContextAccessor.HttpContext!.User
+            .FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
+    }
+
+    public string GetUserName()
+    {
+        return _httpContextAccessor.HttpContext!.User
+            .FindFirst(ClaimTypes.Name)?.Value ?? string.Empty;
+    }
 }

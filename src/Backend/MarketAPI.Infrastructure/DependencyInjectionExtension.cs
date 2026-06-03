@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using FluentMigrator.Runner;
+using MarketAPI.Domain.Messaging;
 using MarketAPI.Domain.Repositories;
 using MarketAPI.Domain.Repositories.Cart;
 using MarketAPI.Domain.Repositories.Order;
@@ -9,12 +10,14 @@ using MarketAPI.Domain.Security.PasswordHashing;
 using MarketAPI.Domain.Security.Tokens;
 using MarketAPI.Infrastructure.DataAccess;
 using MarketAPI.Infrastructure.DataAccess.Repositories;
+using MarketAPI.Infrastructure.Messaging;
 using MarketAPI.Infrastructure.Security;
 using MarketAPI.Infrastructure.Security.PasswordHashing;
 using MarketAPI.Infrastructure.Security.Tokens;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RabbitMQ.Client;
 
 namespace MarketAPI.Infrastructure;
 
@@ -34,6 +37,15 @@ public static class DependencyInjectionExtension
             services.AddHttpContextAccessor();
             services.AddScoped<ILoggedUser, LoggedUser>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IMessagePublisher, RabbitMqPublisher>();
+            
+            var rabbitMqHost = configuration["RabbitMQ:Host"]!;
+            
+            services.AddSingleton<IConnection>(_ =>
+            {
+                var factory = new ConnectionFactory { HostName = rabbitMqHost };
+                return factory.CreateConnectionAsync().GetAwaiter().GetResult();
+            });
             
             var signingKey = configuration["Jwt:SigningKey"]!;
             var expirationMinutes = int.Parse(configuration["Jwt:ExpirationMinutes"]!);
