@@ -8,6 +8,7 @@
     <Project Path="src/Backend/MarketAPI.Application/MarketAPI.Application.csproj" />
     <Project Path="src/Backend/MarketAPI.Domain/MarketAPI.Domain.csproj" />
     <Project Path="src/Backend/MarketAPI.Infrastructure/MarketAPI.Infrastructure.csproj" />
+    <Project Path="src/Backend/MarketAPI.Worker/MarketAPI.Worker.csproj" />
   </Folder>
   <Folder Name="/src/Shared/">
     <Project Path="src/Shared/MarketAPI.Communication/MarketAPI.Communication.csproj" />
