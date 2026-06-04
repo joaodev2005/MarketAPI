@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using MarketAPI.Domain.Messaging.Messages;
+using MarketAPI.Worker.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -10,11 +11,13 @@ public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
     private readonly IConnection _connection;
+    private readonly IEmailService _emailService;
 
-    public Worker(ILogger<Worker> logger, IConnection connection)
+    public Worker(ILogger<Worker> logger, IConnection connection, IEmailService emailService)
     {
         _logger = logger;
         _connection = connection;
+        _emailService = emailService;
     }
     
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -22,7 +25,7 @@ public class Worker : BackgroundService
         var channel = await _connection.CreateChannelAsync(cancellationToken: stoppingToken);
 
         await channel.QueueDeclareAsync(
-            queue: "order-created",
+            queue: Queues.OrderCreated,
             durable: true,
             exclusive: false,
             autoDelete: false,
@@ -30,22 +33,37 @@ public class Worker : BackgroundService
 
         var consumer = new AsyncEventingBasicConsumer(channel);
 
-        consumer.ReceivedAsync += async (model, ea) =>
+        consumer.ReceivedAsync += async (_, ea) =>
         {
-            var body = ea.Body.ToArray();
-            var message = JsonSerializer.Deserialize<OrderCreatedMessage>(
-                Encoding.UTF8.GetString(body));
+            try
+            {
+                var body = ea.Body.ToArray();
+                var message = JsonSerializer.Deserialize<OrderCreatedMessage>(
+                    Encoding.UTF8.GetString(body));
 
-            _logger.LogInformation("Order received: {OrderId} for {Email}", 
-                message!.OrderId, message.CustomerEmail);
+                if (message is null)
+                {
+                    _logger.LogWarning("Invalid message received");
+                    await channel.BasicNackAsync(ea.DeliveryTag, false, false, stoppingToken);
+                    return;
+                }
 
-            // aqui vai o SendGrid para enviar o email
-            
-            await channel.BasicAckAsync(ea.DeliveryTag, false, stoppingToken);
+                _logger.LogInformation("Order received: {OrderId} for {Email}",
+                    message.OrderId, message.CustomerEmail);
+
+                await _emailService.SendOrderCreatedEmailAsync(message);
+
+                await channel.BasicAckAsync(ea.DeliveryTag, false, stoppingToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing message");
+                await channel.BasicNackAsync(ea.DeliveryTag, false, true, stoppingToken);
+            }
         };
 
         await channel.BasicConsumeAsync(
-            queue: "order-created",
+            queue: Queues.OrderCreated,
             autoAck: false,
             consumer: consumer,
             cancellationToken: stoppingToken);

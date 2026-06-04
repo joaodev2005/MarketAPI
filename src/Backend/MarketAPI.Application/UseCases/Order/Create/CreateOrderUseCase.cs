@@ -22,10 +22,10 @@ public class CreateOrderUseCase : ICreateOrderUseCase
     private readonly IMessagePublisher _messagePublisher;
 
     public CreateOrderUseCase(
-        ICartRepository cartRepository, 
-        IOrderRepository orderRepository, 
-        IProductRepository productRepository, 
-        ILoggedUser loggedUser, 
+        ICartRepository cartRepository,
+        IOrderRepository orderRepository,
+        IProductRepository productRepository,
+        ILoggedUser loggedUser,
         IUnitOfWork unitOfWork, IMessagePublisher messagePublisher)
     {
         _cartRepository = cartRepository;
@@ -44,9 +44,13 @@ public class CreateOrderUseCase : ICreateOrderUseCase
         if (cart is null || !cart.Items.Any())
             throw new ErrorOnValidationException(["Cart is empty"]);
 
+        // busca produtos uma vez e valida estoque
+        var products = new Dictionary<Guid, Domain.Entities.Product>();
         foreach (var item in cart.Items)
         {
             var product = await _productRepository.GetByIdAsync(item.ProductId);
+            products[item.ProductId] = product!;
+
             if (product!.Stock < item.Quantity)
                 throw new ErrorOnValidationException([$"Insufficient stock for {product.Name}"]);
         }
@@ -72,17 +76,17 @@ public class CreateOrderUseCase : ICreateOrderUseCase
 
         order.Total = order.Items.Sum(i => i.Price * i.Quantity);
 
+        // reutiliza do dicionário
         foreach (var item in cart.Items)
         {
-            var product = await _productRepository.GetByIdAsync(item.ProductId);
-            product!.Stock -= item.Quantity;
+            products[item.ProductId].Stock -= item.Quantity;
         }
 
         await _orderRepository.AddAsync(order);
         await _cartRepository.ClearAsync(cart);
         await _unitOfWork.Commit();
 
-        _messagePublisher.Publish(new OrderCreatedMessage
+        await _messagePublisher.PublishAsync(new OrderCreatedMessage
         {
             OrderId = order.Id,
             CustomerEmail = _loggedUser.GetUserEmail(),

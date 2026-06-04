@@ -14,22 +14,22 @@ public class RabbitMqPublisher : IMessagePublisher
         _connection = connection;
     }
 
-    public void Publish<T>(T message, string queueName)
+    public async Task PublishAsync<T>(T message, string queueName)
     {
-        using var channel = _connection.CreateChannelAsync().GetAwaiter().GetResult();
+        var channel = await _connection.CreateChannelAsync();
 
-        channel.QueueDeclareAsync(
+        await channel.QueueDeclareAsync(
             queue: queueName,
             durable: true,
             exclusive: false,
-            autoDelete: false).GetAwaiter().GetResult();
+            autoDelete: false);
 
         var json = JsonSerializer.Serialize(message);
         var body = Encoding.UTF8.GetBytes(json);
 
-        channel.BasicPublishAsync(
+        await channel.BasicPublishAsync(
             exchange: string.Empty,
             routingKey: queueName,
-            body: body).GetAwaiter().GetResult();
+            body: body);
     }
 }
