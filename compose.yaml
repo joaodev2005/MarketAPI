@@ -7,9 +7,14 @@
     depends_on:
       - sqlserver
       - rabbitmq
+      - redis
+    ports:
+      - "8080:8080"
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: marketapi-sqlserver
+    restart: unless-stopped
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Your@Password123
@@ -20,12 +25,24 @@
 
   rabbitmq:
     image: rabbitmq:3-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
+    container_name: marketapi-rabbitmq
+    restart: unless-stopped
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  redis:
+    image: redis:alpine
+    container_name: marketapi-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
 
 volumes:
   sqlserver_data: {}
+  redis_data: {}

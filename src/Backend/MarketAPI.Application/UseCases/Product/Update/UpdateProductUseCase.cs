@@ -1,7 +1,9 @@
 ﻿using MarketAPI.Communication.Requests;
+using MarketAPI.Domain.Constants;
 using MarketAPI.Domain.Repositories;
 using MarketAPI.Domain.Repositories.Product;
 using MarketAPI.Exception.ExceptionsBase;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace MarketAPI.Application.UseCases.Product.Update;
 
@@ -10,15 +12,18 @@ public class UpdateProductUseCase : IUpdateProductUseCase
     private readonly IProductRepository _productRepository;
     private readonly ICategoryRepository _categoryRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IDistributedCache _cache;
 
     public UpdateProductUseCase(
         IProductRepository productRepository, 
         ICategoryRepository categoryRepository, 
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork, 
+        IDistributedCache cache)
     {
         _productRepository = productRepository;
         _categoryRepository = categoryRepository;
         _unitOfWork = unitOfWork;
+        _cache = cache;
     }
 
     public async Task Execute(Guid id, RequestProductJson request)
@@ -36,6 +41,8 @@ public class UpdateProductUseCase : IUpdateProductUseCase
         product.CategoryId = request.CategoryId;
 
         await _unitOfWork.Commit();
+        
+        await _cache.RemoveAsync(CacheKeys.Products);
     }
     
     private async Task ValidateAndThrowOnFailures(RequestProductJson request)

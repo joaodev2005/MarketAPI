@@ -39,6 +39,11 @@ public static class DependencyInjectionExtension
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IMessagePublisher, RabbitMqPublisher>();
             
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration["Redis:Connection"];
+            });
+            
             var rabbitMqHost = configuration["RabbitMQ:Host"]!;
             
             services.AddSingleton<IConnection>(_ =>

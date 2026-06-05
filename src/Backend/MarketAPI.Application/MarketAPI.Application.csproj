@@ -15,6 +15,7 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="Mapster" Version="10.0.8-pre06" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.8" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="11.0.0-preview.4.26230.115" />
   </ItemGroup>
 
