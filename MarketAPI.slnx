@@ -14,5 +14,10 @@
     <Project Path="src/Shared/MarketAPI.Communication/MarketAPI.Communication.csproj" />
     <Project Path="src/Shared/MarketAPI.Exception/MarketAPI.Exception.csproj" />
   </Folder>
-  <Folder Name="/tests/" />
+  <Folder Name="/tests/">
+    <Project Path="tests/CommonTestUtilities/CommonTestUtilities.csproj" Id="ee114d7b-bd59-409e-a368-4425fd6c9f07" />
+    <Project Path="tests/UseCases.Tests/UseCases.Tests.csproj" Id="5970dbdc-e8bf-44d5-8385-1eb321c0f2e2" />
+    <Project Path="tests/Validators.Tests/Validators.Tests.csproj" Id="bda82545-5a27-4c05-82c1-7c135bd22d59" />
+    <Project Path="tests/WebApi.Tests/WebApi.Tests.csproj" Id="9cac0c0a-25f1-4346-a85a-0fa3e7890c0d" />
+  </Folder>
 </Solution>
