@@ -8,8 +8,8 @@ public class CreateCategoryValidator : AbstractValidator<RequestCategoryJson>
 {
     public CreateCategoryValidator()
     {
-        RuleFor<object>(c => c.Name)
+        RuleFor(c => c.Name)
             .NotEmpty()
-            .WithMessage(ResourceMessagesException.VALIDATION_NAME_REQUIRED);
+    .        WithMessage(ResourceMessagesException.VALIDATION_NAME_REQUIRED);
     }
 }
