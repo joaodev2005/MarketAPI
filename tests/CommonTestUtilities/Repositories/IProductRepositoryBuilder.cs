@@ -22,5 +22,12 @@ public class IProductRepositoryBuilder
         return this;
     }
 
+    public IProductRepositoryBuilder ExistsByCategoryId(bool exists)
+    {
+        _mock.Setup(r => r.ExistsByCategoryIdAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(exists);
+        return this;
+    }
+
     public IProductRepository Build() => _mock.Object;
 }

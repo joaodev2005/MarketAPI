@@ -14,7 +14,7 @@ public class CreateProductUseCaseTests
     public async Task Success()
     {
         var request = RequestProductJsonBuilder.Build();
-        var category = new Category { Id = request.CategoryId, Name = "Test" };
+        var category = new MarketAPI.Domain.Entities.Category { Id = request.CategoryId, Name = "Test" };
 
         var useCase = CreateUseCase(category);
         var result = await useCase.Execute(request);
@@ -68,7 +68,7 @@ public class CreateProductUseCaseTests
         await act.Should().ThrowAsync<ErrorOnValidationException>();
     }
 
-    private CreateProductUseCase CreateUseCase(Category? category = null)
+    private CreateProductUseCase CreateUseCase(MarketAPI.Domain.Entities.Category? category = null)
     {
         var categoryRepositoryBuilder = new ICategoryRepositoryBuilder();
 

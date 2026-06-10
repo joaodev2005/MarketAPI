@@ -14,8 +14,8 @@ public class ListProductsUseCaseTests
     {
         var products = new List<MarketAPI.Domain.Entities.Product>
         {
-            new() { Id = Guid.NewGuid(), Name = "Product 1", Price = 100, Stock = 10, Category = new Category { Name = "Cat 1" } },
-            new() { Id = Guid.NewGuid(), Name = "Product 2", Price = 200, Stock = 5, Category = new Category { Name = "Cat 2" } }
+            new() { Id = Guid.NewGuid(), Name = "Product 1", Price = 100, Stock = 10, Category = new MarketAPI.Domain.Entities.Category { Name = "Cat 1" } },
+            new() { Id = Guid.NewGuid(), Name = "Product 2", Price = 200, Stock = 5, Category = new MarketAPI.Domain.Entities.Category { Name = "Cat 2" } }
         };
 
         var useCase = CreateUseCase(products);

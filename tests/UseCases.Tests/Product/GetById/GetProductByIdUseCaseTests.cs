@@ -18,7 +18,7 @@ public class GetProductByIdUseCaseTests
             Description = "Test Description",
             Price = 100,
             Stock = 10,
-            Category = new Category { Name = "Test Category" }
+            Category = new MarketAPI.Domain.Entities.Category { Name = "Test Category" }
         };
 
         var useCase = CreateUseCase(product);

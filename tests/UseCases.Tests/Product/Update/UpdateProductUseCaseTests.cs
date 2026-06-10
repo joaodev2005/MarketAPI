@@ -3,7 +3,6 @@ using CommonTestUtilities.Repositories;
 using CommonTestUtilities.Requests;
 using FluentAssertions;
 using MarketAPI.Application.UseCases.Product.Update;
-using MarketAPI.Domain.Entities;
 using MarketAPI.Exception.ExceptionsBase;
 
 namespace UseCases.Tests.Product.Update;
@@ -22,7 +21,7 @@ public class UpdateProductUseCaseTests
             CategoryId = request.CategoryId
         };
 
-        var category = new Category { Id = request.CategoryId, Name = "Test" };
+        var category = new MarketAPI.Domain.Entities.Category { Id = request.CategoryId, Name = "Test" };
 
         var useCase = CreateUseCase(product, category);
         var act = async () => await useCase.Execute(product.Id, request);
@@ -80,7 +79,7 @@ public class UpdateProductUseCaseTests
 
     private UpdateProductUseCase CreateUseCase(
        MarketAPI.Domain.Entities.Product? product = null,
-       Category? category = null)
+       MarketAPI.Domain.Entities.Category? category = null)
     {
         var productRepositoryBuilder = new IProductRepositoryBuilder();
         var categoryRepositoryBuilder = new ICategoryRepositoryBuilder();

@@ -14,6 +14,20 @@ public class ICategoryRepositoryBuilder
             .ReturnsAsync(category);
         return this;
     }
+    public ICategoryRepositoryBuilder ExistsByName(bool exists)
+    {
+        _mock.Setup(r => r.ExistsByNameAsync(It.IsAny<string>()))
+            .ReturnsAsync(exists);
+        return this;
+    }
+
+    public ICategoryRepositoryBuilder GetAll(List<Category> categories)
+    {
+        _mock.Setup(r => r.GetAllAsync())
+            .ReturnsAsync(categories);
+        return this;
+    }
 
     public ICategoryRepository Build() => _mock.Object;
+
 }
