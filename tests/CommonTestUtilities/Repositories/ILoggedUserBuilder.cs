@@ -14,5 +14,13 @@ public class ILoggedUserBuilder
         _mock.Setup(u => u.GetUserName()).Returns("Test User");
     }
 
+    public ILoggedUserBuilder GetUserId(Guid userId)
+    {
+        _mock.Setup(x => x.GetUserId())
+             .Returns(userId);
+
+        return this;
+    }
+
     public ILoggedUser Build() => _mock.Object;
 }
