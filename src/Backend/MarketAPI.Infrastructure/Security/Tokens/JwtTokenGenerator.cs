@@ -17,10 +17,12 @@ internal class JwtTokenGenerator : IAccessTokenGenerator
         _signingKey = signingKey;
         _expirationMinutes = expirationMinutes;
     }
-    
+
     public string Generate(User user)
     {
-        var claims = new List<Claim>
+        try
+        {
+            var claims = new List<Claim>
         {
             new(ClaimTypes.Sid, user.Id.ToString()),
             new(ClaimTypes.Name, user.Name),
@@ -28,15 +30,25 @@ internal class JwtTokenGenerator : IAccessTokenGenerator
             new(ClaimTypes.Role, user.Role.ToString())
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_signingKey));
-        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var key = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_signingKey));
 
-        var token = new JwtSecurityToken(
-            expires: DateTime.UtcNow.AddMinutes(_expirationMinutes),
-            signingCredentials: credentials,
-            claims: claims
-        );
+            var credentials = new SigningCredentials(
+                key,
+                SecurityAlgorithms.HmacSha256);
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+            var token = new JwtSecurityToken(
+                expires: DateTime.UtcNow.AddMinutes(_expirationMinutes),
+                signingCredentials: credentials,
+                claims: claims
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            throw;
+        }
     }
 }

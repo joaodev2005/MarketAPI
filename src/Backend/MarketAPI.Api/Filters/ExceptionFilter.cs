@@ -12,6 +12,9 @@ public class ExceptionFilter : IExceptionFilter
     {
         if (context.Exception is MarketApiException myRecipeBookException)
         {
+            Console.WriteLine($"ERRO: {context.Exception.Message}");
+            Console.WriteLine($"INNER: {context.Exception.InnerException?.Message}");
+            Console.WriteLine($"STACK: {context.Exception.StackTrace}");
             context.HttpContext.Response.StatusCode = (int)myRecipeBookException.GetStatusCode();
 
             context.Result = new ObjectResult(new ResponseErrorJson(myRecipeBookException.GetErrorMessages()));

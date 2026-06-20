@@ -102,3 +102,5 @@ async Task SeedAdmin()
     
     await AdminSeed.Seed(scope.ServiceProvider, builder.Configuration);
 }
+
+public partial class Program { }
