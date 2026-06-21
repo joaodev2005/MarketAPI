@@ -1,6 +1,6 @@
 # MarketAPI 🛒
 
-![GitHub Actions Status](https://github.com/joaodev2005/MarketAPI/actions/workflows/ci.yml/badge.svg)
+[![CI/CD - GitHub Actions](https://github.com/joaodev2005/MarketAPI/actions/workflows/ci.yml/badge.svg)](https://github.com/joaodev2005/MarketAPI/actions)
 
 Apresentando o **MarketAPI** - uma solução robusta, distribuída e de alta performance desenvolvida em **.NET 10** para gerenciamento de mercado. O projeto foi construído aplicando conceitos avançados de arquitetura, sistemas de mensageria assíncrona e processamento em segundo plano para suportar cenários reais, resilientes e escaláveis.
 
