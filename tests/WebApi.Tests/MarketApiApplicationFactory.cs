@@ -91,31 +91,25 @@ public class MarketApiApplicationFactory : WebApplicationFactory<Program>, IAsyn
     {
         var httpClient = CreateClient();
 
-        // 1. Gera os dados dinâmicos do novo Customer
         var registerRequest = RequestRegisterUserAccountJsonBuilder.Build();
 
-        // Guardamos a senha gerada para usar no login
         string passwordUsed = registerRequest.Password;
 
-        // 2. Registra o usuário (Ajuste a rota "/user" se o seu endpoint for diferente, ex: "/account")
         var registerResponse = httpClient.PostAsJsonAsync("/user", registerRequest).GetAwaiter().GetResult();
         registerResponse.EnsureSuccessStatusCode();
 
-        // 3. Faz o login com o usuário recém-criado
         var loginRequest = new RequestLoginJson
         {
             Email = registerRequest.Email,
             Password = passwordUsed
         };
 
-        // Ajuste a rota "/authentication" se o seu endpoint de login for diferente (ex: "/login")
         var loginResponse = httpClient.PostAsJsonAsync("/authentication", loginRequest).GetAwaiter().GetResult();
         loginResponse.EnsureSuccessStatusCode();
 
         var content = loginResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
         var json = System.Text.Json.JsonDocument.Parse(content);
 
-        // Navega no JSON para pegar o token (Ajuste conforme a estrutura do seu ResponseLoginJson)
         return json.RootElement.GetProperty("tokens").GetProperty("accessToken").GetString()!;
     }
 }
