@@ -68,7 +68,7 @@ public class RegisterUserAccountUseCaseTests
         var tokenGenerator = new AccessTokenGeneratorBuilder().Build();
 
         if (emailThatAlreadyExists.IsNotEmpty())
-            userReadOnlyRepositoryBuilder.ExistActiveUserWithEmail(emailThatAlreadyExists);
+            userReadOnlyRepositoryBuilder.ExistActiveUserWithEmail(emailThatAlreadyExists!);
 
         return new RegisterUserAccountUseCase(
             userWriteOnlyRepository,

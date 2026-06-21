@@ -44,7 +44,7 @@ public class LoginWithEmailAndPasswordTests
             userReadOnlyRepositoryBuilder.GetByEmail(user);
 
         if (password.IsNotEmpty())
-            passwordHasherBuilder.VerifyPassword(password);
+            passwordHasherBuilder.VerifyPassword(password!);
 
         return new LoginWithEmailAndPasswordUseCase(
             passwordHasherBuilder.Build(),
