@@ -1,8 +1,6 @@
 <Solution>
   <Folder Name="/.github/" />
-  <Folder Name="/.github/workflows/">
-    <File Path="Dotnet.yml" />
-  </Folder>
+  <Folder Name="/.github/workflows/" />
   <Folder Name="/Solution Items/">
     <File Path="compose.yaml" />
   </Folder>
