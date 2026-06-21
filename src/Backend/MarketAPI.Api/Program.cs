@@ -84,7 +84,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 ExecuteMigrations();
-
 await SeedAdmin();
     
 app.Run();

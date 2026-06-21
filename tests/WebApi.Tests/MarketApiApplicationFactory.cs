@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System.Net.Http.Json;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +13,8 @@ namespace WebApi.Tests;
 public class MarketApiApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly MsSqlContainer _msSqlContainer;
+
+    private string? _adminToken;
 
     public MarketApiApplicationFactory()
     {
@@ -28,12 +31,8 @@ public class MarketApiApplicationFactory : WebApplicationFactory<Program>, IAsyn
                 var parameters = new Dictionary<string, string?>
                 {
                     ["ConnectionStrings:DefaultConnection"] = _msSqlContainer.GetConnectionString(),
-                    ["Jwt:SigningKey"] = "test-signing-key-minimum-32-characters",
-                    ["Jwt:ExpirationMinutes"] = "60",
                     ["Admin:Email"] = "admin@test.com",
-                    ["Admin:Password"] = "Admin@123",
-                    ["RabbitMQ:Host"] = "localhost",
-                    ["Redis:Connection"] = "localhost:6379"
+                    ["Admin:Password"] = "Admin@123"
                 };
 
                 configuration.AddInMemoryCollection(parameters);
@@ -64,4 +63,25 @@ public class MarketApiApplicationFactory : WebApplicationFactory<Program>, IAsyn
     }
 
     Task IAsyncLifetime.DisposeAsync() => _msSqlContainer.DisposeAsync().AsTask();
+
+    public string GetAdminToken()
+    {
+        if (_adminToken is not null)
+            return _adminToken;
+
+        var loginRequest = new MarketAPI.Communication.Requests.RequestLoginJson
+        {
+            Email = "admin@test.com",
+            Password = "Admin@123"
+        };
+
+        var client = CreateClient();
+        var response = client.PostAsJsonAsync("/authentication", loginRequest).GetAwaiter().GetResult();
+        var content = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        var json = System.Text.Json.JsonDocument.Parse(content);
+
+        _adminToken = json.RootElement.GetProperty("tokens").GetProperty("accessToken").GetString()!;
+
+        return _adminToken;
+    }
 }
